@@ -1,0 +1,25 @@
+plugins {
+    id 'java'
+    id 'com.github.johnrengelman.shadow' version '7.1.2'
+}
+
+group = 'com.pwing'
+version = '1.0.0'
+
+repositories {
+    mavenCentral()
+    maven { url 'https://hub.spigotmc.org/nexus/content/repositories/snapshots/' }
+    maven { url 'https://mvn.lumine.io/repository/maven-public/' }
+    maven { url 'https://nexus.phoenixdevt.fr/repository/maven-public/' }
+    maven { url 'https://repo.papermc.io/repository/maven-public/' }
+}
+
+dependencies {
+    compileOnly 'org.spigotmc:spigot-api:1.20.1-R0.1-SNAPSHOT'
+    compileOnly 'io.lumine:Mythic-Dist:5.3.5'
+    compileOnly 'net.Indyuce:MMOItems-API:6.9.4-SNAPSHOT'
+    implementation 'org.bstats:bstats-bukkit:3.0.2'
+}
+shadowJar {
+    relocate 'org.bstats', 'com.pwing.mmoconversion.libs.bstats'
+}

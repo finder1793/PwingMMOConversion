@@ -1,0 +1,10 @@
+name: PwingMMOConversion
+version: '${version}'
+main: com.pwing.mmoconversion.PwingMMOConversion
+api-version: '1.20'
+depend: [MythicCrucible, MMOItems]
+commands:
+  convertitems:
+    description: Convert MMOItems to MythicCrucible format
+    usage: /convertitems
+    permission: pwingmmoconversion.convert
