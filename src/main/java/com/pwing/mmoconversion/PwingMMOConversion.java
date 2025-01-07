@@ -11,25 +11,22 @@ import java.io.File;
 
 public class PwingMMOConversion extends JavaPlugin {
     private ItemConverter itemConverter;
-    private StatConverter statConverter;
+    private SetConverter setConverter;
 
     @Override
     public void onEnable() {
-        // Create plugin directory
         if (!getDataFolder().exists()) {
             getDataFolder().mkdirs();
         }
         
-        // Initialize converters
-        this.statConverter = new StatConverter();
-        this.itemConverter = new ItemConverter(this, statConverter);
-        
-        // Register command
+        StatConverter statConverter = new StatConverter(new File(getDataFolder().getParentFile(), "MythicMobs"));
+        this.setConverter = new SetConverter(this, statConverter);
+        this.itemConverter = new ItemConverter(this, statConverter, setConverter);
+
         getCommand("convertitems").setExecutor(new ConvertCommand());
         
         getLogger().info("PwingMMOConversion enabled successfully!");
     }
-
     @Override
     public void onDisable() {
         getLogger().info("PwingMMOConversion disabled!");
@@ -44,9 +41,17 @@ public class PwingMMOConversion extends JavaPlugin {
             }
 
             sender.sendMessage("§aStarting conversion process...");
-            int converted = itemConverter.convertAllItems();
-            sender.sendMessage("§aSuccessfully converted " + converted + " items!");
-            
+
+            // Convert items
+            int convertedItems = itemConverter.convertAllItems();
+
+            // Convert sets
+            File mmoSetsFile = new File(getDataFolder().getParentFile(), "MMOItems/item-sets.yml");
+            File mythicSetsFile = new File(getDataFolder().getParentFile(), "MythicCrucible/equipment-sets.yml");
+            setConverter.convertSets(mmoSetsFile, mythicSetsFile);
+
+            sender.sendMessage("§aSuccessfully converted " + convertedItems + " items and their sets!");
+
             return true;
         }
     }
